@@ -1,0 +1,16 @@
+Question 1
+First of all, download the sources for this lab, compile and execute the program testVersion. Is the stability test (w.r.t. minor version numbers) correct?
+--Yes
+
+Question 2
+The computation to find the minor version is syntactically valid and looks correct. With the help of a debugger, explain why the program produces this output.
+--Which computation?
+
+Question 3
+Using the name of the structure members, fix the is_unstable() function.
+-- return 1 & ((char*)&v->minor)[0] instead of return 1 & ((char *)v)[sizeof(unsigned long)];
+-- Padding (alignment) führt dazu, dass die Adresse von minor nicht bei sizeof(unsigned long) liegt.
+
+Question 4
+What is the memory footprint of struct version? Is it optimal?
+--No, we can change the order minor -> major -> flags
