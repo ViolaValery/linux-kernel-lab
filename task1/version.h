@@ -2,9 +2,9 @@
 #define VERSION_H
 
 struct version {
-	unsigned short major;
-	unsigned long minor;
-	char flags;
+	unsigned long minor; // 8 byte
+	unsigned short major; // 2 byte 
+	char flags; // 1 byte
 };
 
 int is_unstable(struct version *v);
