@@ -3,6 +3,7 @@
     "files.associations": {
         "*.rmd": "markdown",
         "*.json": "json",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "stdlib.h": "c"
     }
 }
