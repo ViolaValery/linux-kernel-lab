@@ -11,7 +11,7 @@ all : testVersion
 testVersion : testVersion.o version.o
 	gcc -g -Wall $^ -o $@
 
-testOffset : testOffset.o testOffset.h // Notwendig? 
+testOffset : testOffset.o testOffset.h
 	gcc -g -Wall $^ -o $@
 
 testHistory : testHistory.o history.o commit.o

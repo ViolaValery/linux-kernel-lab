@@ -1,6 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <offset.h>
+#include "commit.h"
+
+// Macro to calculate the offset of a member within a struct
+#define offset_of(type, member) ((size_t) &(((type *)0)->member))
 
 void printAdressesOfStructMembers(struct commit *commit)
 {

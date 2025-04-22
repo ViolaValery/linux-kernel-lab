@@ -4,7 +4,7 @@
 #include "version.h"
 #include "commit.h"
 
-display_history(struct history *history)
+void display_history(struct history *history)
 {
     printf("History of '%s':\n", history->name);
 
@@ -13,7 +13,7 @@ display_history(struct history *history)
     for (int i = 0; i < history->commit_count; i++)
     {
         commit = (struct commit*)(&history->commit_list + i); //i ist automatisch size 40
-        printf("%d: ", (i + 1));
+        printf("%ld: ", commit->id);
         display_version(&commit->version);
         printf("'%s'\n", commit->comment);
     }
@@ -22,10 +22,17 @@ display_history(struct history *history)
 
 int main(int argc, char const *argv[])
 {
-    // Create a new history and add the asked commits
-    struct history *testHistory = struct new_history("Circle of Life");
-    
+    // Create a new history
+    struct history *test_history = (struct history*)new_history("Circle of Life");
 
-    display_history(testHistory); 
+    // Add commits
+    for(int i = 0; i < 4; i++)
+    {
+        char *comment = "Work " + (i+1);
+        struct commit *test_commit = new_commit(i+1, 0, i+1, comment);
+        test_history = add_minor_commit(test_history, test_commit);
+    }
+    
+    display_history(test_history); 
     return 0;
 }

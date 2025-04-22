@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "history.h"
 #include "version.h"
-#include "offset.h"
+#include "commit.h"
 
 struct commit *new_commit(unsigned long id, unsigned short major, unsigned long minor, char *comment)
 {
@@ -34,7 +34,7 @@ struct history *new_history(char *name)
     }
     history->commit_count = 0;
     history->name = name;
-    history->commit_list = &history->commit_list;
+    history->commit_list = history->commit_list;
     return history;
 }
 
@@ -60,12 +60,12 @@ static struct history *insert_commit(struct history *history, struct commit *com
     return history;
 }
 
-static struct history *add_minor_commit(struct history *history, struct commit *commit)
+struct history *add_minor_commit(struct history *history, struct commit *commit)
 {
     return insert_commit(history, commit);
 }
 
-static struct history *add_ajor_commit(struct history *history, struct commit *commit)
+struct history *add_major_commit(struct history *history, struct commit *commit)
 {
     return insert_commit(history, commit);
 }
