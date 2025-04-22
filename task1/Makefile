@@ -3,7 +3,7 @@
 
 CHECK_PATCH=./checkpatch.pl --no-tree
 
-all : testVersion
+all : testVersion testOffset testHistory
 
 %.o : %.c
 	gcc -g -Wall -c $<
@@ -11,10 +11,10 @@ all : testVersion
 testVersion : testVersion.o version.o
 	gcc -g -Wall $^ -o $@
 
-testOffset : testOffset.o testOffset.h
+testOffset : testOffset.o commit.o history.o
 	gcc -g -Wall $^ -o $@
 
-testHistory : testHistory.o history.o commit.o
+testHistory : testHistory.o history.o version.o commit.o
 	gcc -g -Wall $^ -o $@
 
 check : 

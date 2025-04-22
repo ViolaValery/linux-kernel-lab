@@ -14,7 +14,7 @@ struct history *new_history(char *name);
 
 struct commit *last_commit(struct history *history);
 
-struct history *add_minor_commit(struct history *history, struct commit *commit);
+struct history *add_minor_commit(struct history *history, struct commit *commit, struct commit *after_commit);
 
-struct history *add_major_commit(struct history *history, struct commit *commit);
+struct history *add_major_commit(struct history *history, struct commit *commit, struct commit *after_commit);
 #endif
