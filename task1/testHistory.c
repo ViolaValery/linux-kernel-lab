@@ -78,6 +78,11 @@ int main(int argc, char const *argv[])
 
     display_history(test_history);
 
+    // Searching for specific commit versions (Task 3 Question 5)
+    infos(test_history, 1, 2);
+    infos(test_history, 1, 7);
+    infos(test_history, 4, 2);
+
     free_history(test_history);
 
     return 0;

@@ -101,3 +101,33 @@ struct history *add_major_commit(struct history *history, struct commit *commit,
     return insert_commit(history, commit, after_commit);
 }
 
+// Iterates over a history to search for a specific commit version. If found, it should display the commit, else it should print "Not here!!!".
+int infos(struct history *history, unsigned short major, unsigned long minor)
+{
+    printf("Searching for commit %us.%lu :  ", major, minor);
+    struct commit* current_commit = history->commit_list->next;
+
+    for(int i = 0; i < history->commit_count; i++)
+    {
+        // Commit found?
+        if (current_commit->version.major == major && current_commit->version.minor == minor)
+        {
+            printf("%lu: ", current_commit->id);
+            display_version(&current_commit->version);
+            printf("'%s'", current_commit->comment);
+            printf("\n");
+            return 1;
+        }
+            
+        // Cut of the search process if the major version is already greater than the one looked for
+        if (current_commit->version.major >= major && current_commit->version.minor > minor)
+        {
+            printf("Not here!!!\n");
+            return 0;
+        }
+
+        current_commit = current_commit->next;
+    }
+    printf("Not here!!!\n");
+    return 0;
+}

@@ -1,5 +1,6 @@
 #ifndef HISTORY_H
 #define HISTORY_H
+#include "version.h"
 
 struct history
 {
@@ -17,4 +18,7 @@ struct commit *last_commit(struct history *history);
 struct history *add_minor_commit(struct history *history, struct commit *commit, struct commit *after_commit);
 
 struct history *add_major_commit(struct history *history, struct commit *commit, struct commit *after_commit);
+
+int infos(struct history *history, unsigned short major, unsigned long minor);
+
 #endif
