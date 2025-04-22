@@ -22,6 +22,10 @@ display_history(struct history *history)
 
 int main(int argc, char const *argv[])
 {
-    //display_history(); 
+    // Create a new history and add the asked commits
+    struct history *testHistory = struct new_history("Circle of Life");
+    
+
+    display_history(testHistory); 
     return 0;
 }
