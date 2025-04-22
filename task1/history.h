@@ -10,7 +10,7 @@ struct history
 
 struct commit *new_commit(unsigned long id, unsigned short major, unsigned long minor, char *comment);
 
-struct history *new_history(unsigned long commit_count, char *name, struct commit *commit_list);
+struct history *new_history(char *name, struct commit *commit_list);
 
 struct commit *last_commit(struct history *history);
 

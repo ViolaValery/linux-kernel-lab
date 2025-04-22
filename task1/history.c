@@ -23,7 +23,8 @@ struct commit *new_commit(unsigned long id, unsigned short major, unsigned long 
     return commit;
 }
 
-struct history *new_history(unsigned long commit_count, char *name, struct commit *commit_list)
+// Creates a new (blank) histopry with an empty commit list
+struct history *new_history(char *name)
 {
     struct history *history = (struct history*)malloc(24);
     if (history == NULL)
@@ -31,9 +32,9 @@ struct history *new_history(unsigned long commit_count, char *name, struct commi
         fprintf(stderr, "Memory allocation failed\n");
         return NULL;
     }
-    history->commit_count = commit_count;
+    history->commit_count = 0;
     history->name = name;
-    history->commit_list = commit_list;
+    history->commit_list = &history->commit_list;
     return history;
 }
 
