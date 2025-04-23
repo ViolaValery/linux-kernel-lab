@@ -9,15 +9,12 @@ struct history
     struct commit *commit_list; // 8 bytes
 };
 
-struct commit *new_commit(unsigned long id, unsigned short major, unsigned long minor, char *comment);
 
 struct history *new_history(char *name);
 
 struct commit *last_commit(struct history *history);
 
-struct history *add_minor_commit(struct history *history, struct commit *commit, struct commit *after_commit);
-
-struct history *add_major_commit(struct history *history, struct commit *commit, struct commit *after_commit);
+void display_history(struct history *history);
 
 int infos(struct history *history, unsigned short major, unsigned long minor);
 

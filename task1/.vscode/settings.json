@@ -6,7 +6,8 @@
         "stdio.h": "c",
         "stdlib.h": "c",
         "typeinfo": "c",
-        "history.h": "c"
+        "history.h": "c",
+        "version.h": "c"
     },
     "github.copilot.enable": {
         "*": false,

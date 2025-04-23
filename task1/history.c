@@ -5,27 +5,15 @@
 #include "version.h"
 #include "commit.h"
 
-struct commit *new_commit(unsigned long id, unsigned short major, unsigned long minor, char *comment)
-{
-    struct commit *commit = (struct commit *)malloc(sizeof(struct commit));
-    if (commit == NULL)
-    {
-        fprintf(stderr, "Memory allocation failed\n");
-        return NULL;
-    }
 
-    commit->id = id;
-    commit->version.major = major;
-    commit->version.minor = minor;
-    commit->version.flags = 0;
-    commit->comment = (char*)strdup(comment); // TODO Why tho?
-    commit->next = NULL; // Noch nicht eingegliedert 
-    commit->prev = NULL;
 
-    return commit;
-}
-
-// Creates a new (blank) history with an empty commit list
+/**
+ * new_history - Creates a new (blank) history with an empty commit list
+ *
+ * @name: name of the history
+ *
+ * @return: a new history
+ */
 struct history *new_history(char *name)
 {
     struct history *history = (struct history*)malloc(sizeof(struct history));
@@ -59,49 +47,35 @@ struct commit *last_commit(struct history *history)
     return history->commit_list->prev; // Last commit is the one before the phantom commit
 }
 
-// Inserts a new commit into the list of history. After a specified after_commit OR at the end
-static struct history *insert_commit(struct history *history, struct commit *commit, struct commit *after_commit)
+/**
+ * display_history - display the history, i.e., all the commits in the history
+ *
+ * @h: pointer to the history to display
+ */
+void display_history(struct history *history)
 {
+    printf("History of '%s':\n", history->name);
 
-    if (history->commit_list == NULL)
+    struct commit *commit = history->commit_list;
+
+    for (int i = 0; i < history->commit_count; i++)
     {
-        fprintf(stderr, "Inserting commit failed\n");
-        return NULL;
+        commit = commit->next;
+        printf("%ld: ", commit->id);
+        display_version(&commit->version);
+        printf("'%s'\n", commit->comment);
     }
-
-    struct commit *last;
-    // When there is no commit specified, insert after last commit
-    if (after_commit == NULL || after_commit == last_commit(history))
-    {
-        last = last_commit(history);
-        commit->next = history->commit_list;
-        history->commit_list->prev = commit; // First phantom commit points forward to the new commit
-    }
-    else
-    {
-        last = after_commit;
-        commit->next = last->next;
-    }
-
-    last->next = commit;
-    commit->prev = last;
-
-    history->commit_count++;
-    return history;
-
+    printf("\n");
 }
 
-struct history *add_minor_commit(struct history *history, struct commit *commit, struct commit *after_commit)
-{
-    return insert_commit(history, commit, after_commit);
-}
-
-struct history *add_major_commit(struct history *history, struct commit *commit, struct commit *after_commit)
-{
-    return insert_commit(history, commit, after_commit);
-}
-
-// Iterates over a history to search for a specific commit version. If found, it should display the commit, else it should print "Not here!!!".
+/**
+ * infos - display the commit matching the major and minor numbers in history
+ *         if it exists, "Not here!!!" otherwise
+ *
+ * @h: history to search
+ * @major: major version of the commit to display
+ * @minor: minor version of the commit to display
+ */
 int infos(struct history *history, unsigned short major, unsigned long minor)
 {
     printf("Searching for commit %us.%lu :  ", major, minor);
