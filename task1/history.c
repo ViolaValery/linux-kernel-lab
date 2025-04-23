@@ -94,29 +94,31 @@ void display_history(struct history *history)
 int infos(struct history *history, unsigned short major, unsigned long minor)
 {
     printf("Searching for commit %us.%lu :  ", major, minor);
-    struct commit* current_commit = commit_of_list_head(history->commit_list->list_head.next);
 
-    for(int i = 0; i < history->commit_count; i++)
+    if (history == NULL || history->commit_list == NULL)
     {
-        // Commit found?
+        printf("History or commit_list is NULL\n");
+        return 0;
+    }
+
+    struct commit *current_commit = commit_of_list_head(history->commit_list->list_head.next);
+
+    // Durchlaufe die Liste der Commits
+    for (int i = 0; i < history->commit_count; i++)
+    {
+        // Überprüfe, ob Major- und Minor-Version übereinstimmen
         if (current_commit->version.major == major && current_commit->version.minor == minor)
         {
             printf("%lu: ", current_commit->id);
             display_version(&current_commit->version);
-            printf("'%s'", current_commit->comment);
-            printf("\n");
+            printf("'%s'\n", current_commit->comment);
             return 1;
         }
-            
-        // Cut of the search process if the major version is already greater than the one looked for
-        if (current_commit->version.major >= major && current_commit->version.minor > minor)
-        {
-            printf("Not here!!!\n");
-            return 0;
-        }
 
+        // Zum nächsten Commit wechseln
         current_commit = commit_of_list_head(current_commit->list_head.next);
     }
+
     printf("Not here!!!\n");
     return 0;
 }

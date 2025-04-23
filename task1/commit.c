@@ -25,9 +25,14 @@ struct commit *new_commit(unsigned long id, unsigned short major, unsigned long 
         free(commit);
         return NULL;
     }
+
+    // Initialize lists and major parent
     INIT_LIST_HEAD(&commit->list_head);
+    INIT_LIST_HEAD(&commit->major_list);
+    commit->major_parent = NULL;
 
     return commit;
+
 }
 
 /**
@@ -74,7 +79,20 @@ struct commit *add_minor_commit(struct history *history, struct commit *from, st
 
 struct commit *add_major_commit(struct history *history, struct commit *from, struct commit *after_commit)
 {
+    if (from == NULL)
+    {
+        fprintf(stderr, "add_major_commit - Major parent commit is NULL\n");
+        return NULL;
+    }
+
+    // Set major parent of this new commit
+    from->major_parent = after_commit;
+
+    // Add this commit to the major_list
+    list_add_tail(&from->major_list, &after_commit->major_list);
+
     return insert_commit(history, from, after_commit);
+
 }
 
 void printAdressesOfStructMembers(struct commit *commit)

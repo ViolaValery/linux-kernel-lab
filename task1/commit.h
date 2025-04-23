@@ -11,6 +11,8 @@ struct commit
     struct version version; // 8 bytes
     char *comment;          // 8 bytes
     struct list_head list_head;
+    struct list_head major_list; // links major commits
+    struct commit *major_parent;
 };
 
 struct commit *new_commit(unsigned long id, unsigned short major, unsigned long minor, char *comment);
