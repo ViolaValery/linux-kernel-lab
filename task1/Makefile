@@ -14,7 +14,7 @@ testVersion : testVersion.o version.o
 testOffset : testOffset.o history.o commit.o version.o
 	gcc -g -Wall $^ -o $@
 
-testHistory : testHistory.o history.o version.o commit.o
+testHistory : testHistory.o list.h history.o version.o commit.o
 	gcc -g -Wall $^ -o $@
 
 check : 

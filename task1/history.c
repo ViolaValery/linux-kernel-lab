@@ -4,8 +4,7 @@
 #include "history.h"
 #include "version.h"
 #include "commit.h"
-
-
+#include "list.h"
 
 /**
  * new_history - Creates a new (blank) history with an empty commit list
@@ -24,10 +23,18 @@ struct history *new_history(char *name)
     }
     history->commit_count = 0;
     history->name = name;
+
     // Phantom comit, that points to itself (Task 3 Question 2)
-    history->commit_list = (struct commit*)malloc(sizeof(struct commit));
-    history->commit_list->next = history->commit_list;
-    history->commit_list->prev = history->commit_list;
+    struct commit *phantom_commit = new_commit(0, 0, 0, "Phantom commit");
+    if (phantom_commit == NULL)
+    {
+        fprintf(stderr, "new'_history - Initialisation of phantom commit failed.\n");
+        free(history);
+        return NULL;
+    }
+    INIT_LIST_HEAD(&phantom_commit->list_head);
+    history->commit_list = phantom_commit;
+
     return history;
 }
 
@@ -44,7 +51,15 @@ struct commit *last_commit(struct history *history)
         return history->commit_list;
     }
 
-    return history->commit_list->prev; // Last commit is the one before the phantom commit
+    if (history->commit_list == NULL || history->commit_list->list_head.next == NULL)
+    {
+        fprintf(stderr, "last_commit - list_head.next is NULL\n");
+        return NULL;
+    }
+    // Get the list_head of the last commit before the phantom commit
+    struct list_head *list = history->commit_list->list_head.prev;
+    // Calculate the offset to get pointer to the commmit containing the list_head
+    return commit_of_list_head(list);
 }
 
 /**
@@ -56,14 +71,14 @@ void display_history(struct history *history)
 {
     printf("History of '%s':\n", history->name);
 
-    struct commit *commit = history->commit_list;
+    struct commit *commit = commit_of_list_head(history->commit_list->list_head.next);
 
     for (int i = 0; i < history->commit_count; i++)
     {
-        commit = commit->next;
         printf("%ld: ", commit->id);
         display_version(&commit->version);
         printf("'%s'\n", commit->comment);
+        commit = commit_of_list_head(commit->list_head.next);
     }
     printf("\n");
 }
@@ -79,7 +94,7 @@ void display_history(struct history *history)
 int infos(struct history *history, unsigned short major, unsigned long minor)
 {
     printf("Searching for commit %us.%lu :  ", major, minor);
-    struct commit* current_commit = history->commit_list->next;
+    struct commit* current_commit = commit_of_list_head(history->commit_list->list_head.next);
 
     for(int i = 0; i < history->commit_count; i++)
     {
@@ -100,7 +115,7 @@ int infos(struct history *history, unsigned short major, unsigned long minor)
             return 0;
         }
 
-        current_commit = current_commit->next;
+        current_commit = commit_of_list_head(current_commit->list_head.next);
     }
     printf("Not here!!!\n");
     return 0;
